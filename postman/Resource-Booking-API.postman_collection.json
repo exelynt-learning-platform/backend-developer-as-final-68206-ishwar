@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Resource Booking API",
+    "_postman_id": "resource-booking-api-2026",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8080"},
+    {"key": "token", "value": ""},
+    {"key": "adminToken", "value": ""},
+    {"key": "reservationId", "value": "1"}
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"username\":\"user\",\"password\":\"User@123\"}"},
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"username\":\"admin\",\"password\":\"Admin@123\"}"},
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Resources",
+      "item": [
+        {
+          "name": "List Resources",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": "{{baseUrl}}/api/resources"
+          }
+        },
+        {
+          "name": "Create Resource - Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{adminToken}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"name\":\"Training Room\",\"type\":\"ROOM\",\"description\":\"Technical training room\",\"pricePerHour\":800,\"active\":true}"},
+            "url": "{{baseUrl}}/api/resources"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Create Reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\"resourceId\":1,\"startTime\":\"2026-09-10T10:00:00\",\"endTime\":\"2026-09-10T12:00:00\"}"},
+            "url": "{{baseUrl}}/api/reservations"
+          }
+        },
+        {
+          "name": "My Reservations",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": "{{baseUrl}}/api/reservations?page=0&size=10&sortBy=price&direction=desc"
+          }
+        },
+        {
+          "name": "Admin All Reservations",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{adminToken}}"}],
+            "url": "{{baseUrl}}/api/admin/reservations?status=PENDING&page=0&size=10"
+          }
+        }
+      ]
+    }
+  ]
+}
